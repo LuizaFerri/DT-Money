@@ -2,7 +2,7 @@ import {
   HeaderContainer,
   HeaderContent,
   NewTransactionButton
-} from "../../pages/Transactions/styles";
+} from "./styles";
 import logoImg from "../../assets/logo.svg";
 
 export function Header() {
