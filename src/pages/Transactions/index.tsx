@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Header } from "../../components/Header";
 import { Summary } from "../../components/Summary/Index";
 import { SearchForm } from "./SearchForm";
@@ -6,8 +7,12 @@ import {
   TransactionsContainer,
   TransactionsTable,
 } from "./styles";
+import { TransactionContext } from "../../contexts/TransactionsContext";
+
 
 export function Transactions() {
+  const {transactions} = useContext(TransactionContext)
+
   return (
     <div>
       <Header />
@@ -16,40 +21,20 @@ export function Transactions() {
         <SearchForm />
         <TransactionsTable>
           <tbody>
-            <tr>
-              <td width="40%">Desenvolvimento de website</td>
-              <td className="deposit">
-                <PriceHighlight variant="income">R$ 12.000</PriceHighlight>
-              </td>
-              <td>Venda</td>
-              <td>20/02/2023</td>
-            </tr>
-            <tr>
-              <td width="40%">Desenvolvimento de website</td>
-              <td className="deposit">
-                <PriceHighlight variant="income">R$ 12.000</PriceHighlight>
-              </td>
-              <td>Venda</td>
-              <td>20/02/2023</td>
-            </tr>
-            <tr>
-              <td width="40%">Desenvolvimento de website</td>
-              <td className="deposit">
-                {" "}
-                <PriceHighlight variant="income">R$ 12.000</PriceHighlight>
-              </td>
-              <td>Venda</td>
-              <td>20/02/2023</td>
-            </tr>
-            <tr>
-              <td width="40%">Hamburguer</td>
-              <td className="deposit">
-                {" "}
-                <PriceHighlight variant="outcome">- R$ 12.000</PriceHighlight>
-              </td>
-              <td>alimentação</td>
-              <td>20/02/2023</td>
-            </tr>
+            {transactions.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <td width="40%">{transaction.description}</td>
+                  <td className="deposit">
+                    <PriceHighlight variant={transaction.type}>
+                      {transaction.price}
+                    </PriceHighlight>
+                  </td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.createdAt}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </TransactionsTable>
       </TransactionsContainer>
