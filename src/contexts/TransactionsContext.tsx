@@ -12,7 +12,8 @@ interface Transaction {
 
 interface TransactionContextProps {
   transactions: Transaction[];
-  fetchTransactions: (query?:string) => Promise<void>;
+  fetchTransactions: (query?: string) => Promise<void>;
+  createTransaction: (data: NewTransactionData) => Promise<void>;
 }
 
 export const TransactionContext = createContext({} as TransactionContextProps);
@@ -21,23 +22,48 @@ interface TransactionsProviderProps {
   children: React.ReactNode;
 }
 
+interface NewTransactionData {
+  description: string;
+  price: number;
+  category: string;
+  type: "income" | "outcome";
+}
+
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   async function fetchTransactions(query?: string) {
-    const response = await api.get("/transactions",{
+    const response = await api.get("/transactions", {
       params: {
-        q: query
-      }
+        _sort: "createdAt",
+        _order: "desc",
+        q: query,
+      },
     });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     setTransactions(response.data);
   }
+
+  async function createTransaction(data: NewTransactionData) {
+    const { description, price, category, type } = data;
+    const response = await api.post("/transactions", {
+      description,
+      price,
+      category,
+      type,
+      createdAt: new Date(),
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    setTransactions((state) => [response.data, ...state]);
+  }
+
   useEffect(() => {
     void fetchTransactions();
   }, []);
   return (
-    <TransactionContext.Provider value={{ transactions, fetchTransactions }}>
+    <TransactionContext.Provider
+      value={{ transactions, fetchTransactions, createTransaction }}
+    >
       {children}
     </TransactionContext.Provider>
   );

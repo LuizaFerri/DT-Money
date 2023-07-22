@@ -47,6 +47,22 @@
       "type": "outcome",
       "createdAt": "2022-07-30T13:38:57.560Z",
       "id": 6
+    },
+    {
+      "description": "projeto ",
+      "price": 10000,
+      "category": "trabalho",
+      "type": "income",
+      "createdAt": "2023-07-22T01:15:10.158Z",
+      "id": 7
+    },
+    {
+      "description": "pizza",
+      "price": 50,
+      "category": "alimentação",
+      "type": "outcome",
+      "createdAt": "2023-07-22T01:30:08.318Z",
+      "id": 8
     }
   ]
 }
